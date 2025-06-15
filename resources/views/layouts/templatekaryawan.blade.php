@@ -37,6 +37,24 @@
     <!-- jsvectormap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
+
+
+     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+ 
+        {{--}}
+        
+  <!-- Css bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+ 
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+ --}}
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -241,6 +259,7 @@
         </nav>
         <!--end::Header-->
         <!--begin::Sidebar-->
+       
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
             <!--begin::Sidebar Brand-->
             <div class="sidebar-brand">
@@ -277,7 +296,8 @@
                       
                         <li class="nav-item">
                             <a href="{{ route('karyawan.absensi') }}" class="nav-link">
-                                <i class="nav-icon bi bi-clipboard-fill"></i>
+                                
+                                  <i class="nav-icon bi bi-calendar-check"></i>
                                 <p>
                                     Absen
                                    
@@ -288,7 +308,7 @@
 
                           <li class="nav-item">
                             <a href="{{ route('karyawan.izin')}}" class="nav-link">
-                                <i class="nav-icon bi bi-clipboard-fill"></i>
+                                <i class="nav-icon bi bi-file-earmark-text"></i>
                                 <p>
                                     Aproval izin 
                                    
@@ -298,7 +318,7 @@
                           </li>
                            <li class="nav-item">
                             <a href="{{ route('karyawan.riwayat') }}" class="nav-link">
-                                <i class="nav-icon bi bi-clipboard-fill"></i>
+                                 <i class="nav-icon bi bi-clock-history"></i>
                                 <p>
                                     Riwayat 
                                    
@@ -564,7 +584,7 @@
                 </nav>
             </div>
             <!--end::Sidebar Wrapper-->
-        </aside>
+        </aside> 
         <!--end::Sidebar-->
         <!--begin::App Main-->
         <main class="app-main">
@@ -591,6 +611,8 @@
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
+    
+ 
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
         integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
@@ -605,6 +627,11 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {

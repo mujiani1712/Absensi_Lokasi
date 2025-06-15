@@ -98,6 +98,7 @@
                             <h3>65</h3>
                             <p>Unique Visitors</p>
                         </div>
+                    
                         <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path clip-rule="evenodd" fill-rule="evenodd"
@@ -111,6 +112,7 @@
                             class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
                             More info <i class="bi bi-link-45deg"></i>
                         </a>
+
                     </div>
                     <!--end::Small Box Widget 4-->
                 </div>

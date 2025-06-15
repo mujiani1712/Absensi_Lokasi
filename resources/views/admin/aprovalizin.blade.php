@@ -4,9 +4,21 @@
 <div class="card">
     <div class="card-header">Rekap Pengajuan Izin</div>
     <div class="card-body">
+            {{--}}
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        @endif --}}
+    <script>
+    window.onload = function () {
+            @if(session('success'))
+                Swal.fire('Berhasil', '{{ session('success') }}', 'success');
+            @endif
+
+            @if(session('error'))
+                Swal.fire('Gagal', '{{ session('error') }}', 'error');
+            @endif
+        }
+    </script>
         <table class="table table-bordered">
             <thead>
                 <tr>

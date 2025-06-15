@@ -16,7 +16,7 @@ class Absensi extends Model
         'foto',
         'lokasi',
         'jam',
-       // 'status'
+       'status'
     ];
 
 

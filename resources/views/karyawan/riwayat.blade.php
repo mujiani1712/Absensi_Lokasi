@@ -5,97 +5,73 @@
 
 
 @section('content')
+    <div class="container-fluid">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-history"></i> Riwayat Absen</h5>
+        </div>
+        <div class="card-body">
 
-<div class="card">
-  <div class="card-header">
-    Riwayat
-  </div>
-  <div class="card-body">
-    {{--}}
-     @if(session('error'))
-    <div class="d-flex justify-content-center">
-        
-        <div class="alert alert-danger alert-dismissible fade show shadow rounded-3 px-4 py-3 d-flex align-items-center gap-3"
-            role="alert"
-            style="max-width: 800px; border-left: 5px solid #dc3545:" 
-            <i class="bi bi-x-circle-fill fs-4 text-danger"></i>
-            <div>
-                <strong class="d-block">Gagal!</strong>
-                <span>{{ session('error') }}</span>
-            </div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+           
+         <script>
+    window.onload = function () {
+            @if(session('success'))
+                Swal.fire('Berhasil', '{{ session('success') }}', 'success');
+            @endif
+
+            @if(session('error'))
+                Swal.fire('Gagal', '{{ session('error') }}', 'error');
+            @endif
+        }
+</script>
+
+            @if (isset($absensi_terakhir) && count($absensi_terakhir) > 0)
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered table-striped table-hover align-middle">
+                        <thead class="table-dark text-center">
+                            <tr>
+                                <th>Tipe</th>
+                                <th>Foto</th>
+                                <th>Lokasi</th>
+                                <th>Jam</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- Data dari session --}}
+                            @if (session('absen'))
+                                <tr class="text-center">
+                                    <td><span class="badge bg-info text-dark text-capitalize">{{ session('absen')['tipe'] }}</span></td>
+                                    <td><img src="{{ session('absen')['foto'] }}" width="90" class="rounded shadow-sm border"></td>
+                                    <td>{{ session('absen')['lokasi'] }}</td>
+                                    <td>{{ session('absen')['jam'] }}</td>
+                                    <td>{{ \Carbon\Carbon::now()->format('d-m-Y H:i:s') }}</td>
+                                </tr>
+                            @endif
+
+                            {{-- Data dari database --}}
+                            @foreach ($absensi_terakhir as $absen)
+                                <tr class="text-center">
+                                    <td><span class="badge {{ $absen->tipe == 'masuk' ? 'bg-success' : 'bg-danger' }} text-capitalize">{{ $absen->tipe }}</span></td>
+                                    <td>
+                                        <img src="{{ asset($absen->foto) }}" width="90" class="rounded shadow-sm border" onerror="this.style.border='2px solid red';">
+                                    </td>
+                                    <td>{{ $absen->lokasi }}</td>
+                                    <td>{{ $absen->jam }}</td>
+                                    <td>{{ $absen->created_at->format('d-m-Y H:i:s') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle me-2"></i> Belum ada data riwayat absen.
+                </div>
+            @endif
+
         </div>
     </div>
-@endif
---}}
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-
-
-
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
-<!-- Tampilkan riwayat absen dari database -->
-        @if (isset($absensi_terakhir) && count($absensi_terakhir) > 0)
-            <h4 class="mt-5">Riwayat Absen Terakhir</h4>
-            
-                <table class="table table-bordered md-3">
-                    <thead class="thead-dark">
-            
-                        <tr>
-                            <th>Tipe</th>
-                            <th>Foto</th>
-                            <th>Lokasi</th>
-                            <th>Jam</th>
-                            <th>Tanggal</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                      
-                        @if (session('absen'))
-                            <tr>
-                                <td>{{ session('absen')['tipe']}}</td>
-                                <td><img src="{{ session('absen')['foto']}}" width="100"></td>
-                                <td>{{ session('absen')['lokasi']}}</td>
-                                 <td>{{ session('absen')['jam']}}</td>
-
-                                 <td>{{\carbon\carbon::now()->format('d-m-Y H:i:s')}}</td>
-                                  {{--}} <td>{{ session('absen')['status']}}</td> --}}
-                            </tr>
-                        
-                        @endif
-
-                        @foreach ($absensi_terakhir as $absen)
-                            <tr>
-                                <td>{{ $absen->tipe }}</td>
-                                <td>
-                                    <img src="{{ asset($absen->foto) }}" width="100" onerror="this.style.border='3px solid red';">
-                                </td>
-                                <td>{{ $absen->lokasi }}</td>
-                                <td>{{ $absen->jam }}</td>
-                                <td>{{ $absen->created_at->format('d-m-Y H:i:s') }}</td>
-                                {{--}} <td>{{ $absen->status }}</td> --}}
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-           
-       
-    
-    @endif
-    
-       
-  </div>
 </div>
 
 

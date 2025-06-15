@@ -1,5 +1,188 @@
 <?php
 
+/*
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Absensi;
+use App\Models\Jamkerja;
+use App\Models\LokasiAbsensi;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+
+class AbsensiController extends Controller
+{
+    public function index()
+    {
+        $absenMasuk = session('absenMasuk');
+        $absenPulang = session('absenPulang');
+
+        $karyawanId = Auth::id();
+        $absensi_terakhir = Absensi::where('karyawan_id', $karyawanId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('karyawan.absensi', compact('absenMasuk', 'absenPulang', 'absensi_terakhir'));
+    }
+
+    private function hitungJarak($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371000; // meter
+        $latFrom = deg2rad($lat1);
+        $lonFrom = deg2rad($lon1);
+        $latTo = deg2rad($lat2);
+        $lonTo = deg2rad($lon2);
+
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        $a = sin($latDelta / 2) ** 2 +
+             cos($latFrom) * cos($latTo) *
+             sin($lonDelta / 2) ** 2;
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earthRadius * $c;
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'tipe' => 'required|in:masuk,pulang',
+            'foto' => 'required',
+            'lokasi' => 'required',
+            'jam' => 'required',
+        ]);
+
+        $user = Auth::user();
+        $karyawan = $user->karyawan;
+
+        if (!$karyawan) {
+            return redirect()->route('karyawan.absensi')->with('error', 'Karyawan tidak ditemukan.');
+        }
+
+        $lokasiToko = LokasiAbsensi::first();
+        if (!$lokasiToko) {
+            return redirect()->route('karyawan.absensi')->with('error', 'Lokasi kantor belum diatur oleh admin.');
+        }
+
+        list($latKaryawan, $lonKaryawan) = explode(',', $request->lokasi);
+
+        $jarak = $this->hitungJarak(
+            round($latKaryawan, 7),
+            round($lonKaryawan, 7),
+            round($lokasiToko->latitude, 7),
+            round($lokasiToko->longitude, 7)
+        );
+
+        Log::info("Lat Karyawan: $latKaryawan, Lon: $lonKaryawan");
+        Log::info("Lat Toko: {$lokasiToko->latitude}, Lon: {$lokasiToko->longitude}");
+        Log::info("Jarak: $jarak meter (Radius diizinkan: {$lokasiToko->radius} meter)");
+
+        if ($jarak > $lokasiToko->radius) {
+            return redirect()->route('karyawan.riwayat')
+                ->with('error', 'Anda berada di luar area absensi (' . round($jarak) . ' meter dari kantor).');
+        }
+
+        $jamkerja = Jamkerja::first();
+        $jamSekarang = Carbon::parse($request->jam);
+        $tipe = $request->tipe;
+
+        if (!$jamkerja) {
+            return redirect()->route('karyawan.riwayat')->with('error', 'Jam kerja belum diatur oleh admin.');
+        }
+
+        $sudahAbsenMasuk = Absensi::where('karyawan_id', $karyawan->id)
+            ->whereDate('created_at', Carbon::today())
+            ->where('tipe', 'masuk')
+            ->exists();
+
+        if ($tipe === 'masuk') {
+            $batasTerlambat = Carbon::parse($jamkerja->batas_terlambat);
+
+            if ($jamSekarang->gt($batasTerlambat)) {
+                return redirect()->route('karyawan.riwayat')
+                    ->with('error', 'Absen masuk ditolak. Anda terlambat (lebih dari jam ' . $batasTerlambat->format('H:i') . ').');
+            }
+
+            if ($sudahAbsenMasuk) {
+                return redirect()->route('karyawan.riwayat')
+                    ->with('error', 'Anda sudah melakukan absen masuk hari ini.');
+            }
+        }
+
+        if ($tipe === 'pulang') {
+            if (!$sudahAbsenMasuk) {
+                return redirect()->route('karyawan.riwayat')
+                    ->with('error', 'Tidak bisa absen pulang sebelum absen masuk.');
+            }
+
+            $sudahAbsenPulang = Absensi::where('karyawan_id', $karyawan->id)
+                ->whereDate('created_at', Carbon::today())
+                ->where('tipe', 'pulang')
+                ->exists();
+
+            if ($sudahAbsenPulang) {
+                return redirect()->route('karyawan.riwayat')
+                    ->with('error', 'Anda sudah absen pulang hari ini.');
+            }
+
+            $jamPulangMinimal = Carbon::parse($jamkerja->jam_pulang);
+            if ($jamSekarang->lt($jamPulangMinimal)) {
+                return redirect()->route('karyawan.riwayat')
+                    ->with('error', 'Belum saatnya absen pulang. Minimal jam ' . $jamPulangMinimal->format('H:i') . '.');
+            }
+        }
+
+        // Simpan foto dari base64
+        $folderPath = public_path('uploads/foto_absen');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0775, true);
+        }
+
+        $image_parts = explode("base64,", $request->foto);
+        $image_base64 = base64_decode($image_parts[1]);
+        $filename = uniqid() . '.png';
+        $filePath = $folderPath . '/' . $filename;
+        file_put_contents($filePath, $image_base64);
+        $publicPath = 'uploads/foto_absen/' . $filename;
+
+        Absensi::create([
+            'karyawan_id' => $karyawan->id,
+            'name' => $karyawan->name,
+            'tipe' => $tipe,
+            'foto' => $publicPath,
+            'lokasi' => $request->lokasi,
+            'jam' => $request->jam,
+            'status' => $request->status ?? 'hadir',
+        ]);
+
+        session(['absen' . ucfirst($tipe) => [
+            'name' => $karyawan->name,
+            'tipe' => $tipe,
+            'foto' => asset($publicPath),
+            'lokasi' => $request->lokasi,
+            'jam' => $request->jam,
+            'status' => $request->status ?? 'hadir',
+        ]]);
+
+        return redirect()->route('karyawan.riwayat')->with('success', 'Absensi berhasil disimpan!');
+    }
+
+    public function riwayat()
+    {
+        $karyawanId = Auth::id();
+        $absensi_terakhir = Absensi::where('karyawan_id', $karyawanId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('karyawan.riwayat', compact('absensi_terakhir'));
+    }
+}
+*/
+
+
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,18 +194,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
  
-/*
-class AbsensiController extends Controller
-{
-    //
-
-     public function index(Request $request)
-    {
-        //
-        return view('karyawan.absensi');
-    }
-}
-    */
 
 class AbsensiController extends Controller
 {
@@ -281,12 +452,6 @@ class AbsensiController extends Controller
     ]);
     */
 
-
-
-    
-
-
-
     Absensi::create([
         'karyawan_id' => $karyawan->id,
         'name' => $karyawan->name,
@@ -294,7 +459,7 @@ class AbsensiController extends Controller
         'foto' => $publicPath,
         'lokasi' => $request->lokasi,
         'jam' => $request->jam,
-       // 'status' => $request->status,
+       'status' => $request->status ?? 'hadir' //bru tmb
         
     ]);
 
@@ -316,7 +481,7 @@ class AbsensiController extends Controller
         'foto' => asset('uploads/foto_absen/' . $filename),
         'lokasi' => $request->lokasi,
         'jam' => $request->jam,
-       // 'status' => $request->status,
+       'status' => $request->status ?? 'hadir' //tmb
     ];
 
     //session(['absen' => $absensData]);
@@ -344,7 +509,6 @@ public function riwayat(){
 
 }
 */
-
 
 public function riwayat(){
     $loggedInId = Auth::id();

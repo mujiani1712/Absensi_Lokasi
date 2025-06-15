@@ -5,6 +5,7 @@
     <div class="todaypresences">
         <div class="row">
             <!--masuk-->
+            {{--}}
             <div class="col-6">
                 <div class="card bg-green">
                     <div class="card-body">
@@ -17,12 +18,34 @@
                                 <span id="jamMasuk">--:--</span>
                             </div>
                         </div>
-                       {{--}} <button id="btnAbsenMasuk" onclick="capturePhoto()">Absen Masuk</button> --}}
+                       {{--<button id="btnAbsenMasuk" onclick="capturePhoto()">Absen Masuk</button> 
                         <button id="btnAbsenMasuk" onclick="capturePhoto('masuk')">Absen Masuk</button>
 
                     </div>
                 </div>
+            </div> --}}
+
+             <!-- Kartu Absen -->
+    <div class="row">
+        <!-- Absen Masuk -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow border-0 bg-success text-white">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-sign-in-alt fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h4>Masuk</h4>
+                        <p class="mb-1"><strong id="jamMasuk">--:--</strong></p>
+                        <button class="btn btn-light btn-sm mt-2" id="btnAbsenMasuk" onclick="capturePhoto('masuk')">
+                            <i class="fas fa-camera"></i> Absen Masuk
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
+
+            {{--}}
             <!--pulang-->
             <div class="col-6">
                 <div class="card bg-red ">
@@ -37,111 +60,83 @@
                                 <span id="jamPulang">--:--</span>
                             </div>
                         </div>
-                      {{--}}  <button type="button" onclick="capturePhoto('pulang')">Absen Pulang </button> --}}
+                      {{--  <button type="button" onclick="capturePhoto('pulang')">Absen Pulang </button>
                          <button id="btnAbsenPulang" onclick="capturePhoto('pulang')">Absen Pulang</button>
                     </div>
                 </div>
             </div>
+        </div>  --}}
+            <div class="col-md-6 mb-3">
+            <div class="card shadow border-0 bg-danger text-white">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-sign-out-alt fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h4>Pulang</h4>
+                        <p class="mb-1"><strong id="jamPulang">--:--</strong></p>
+                        <button class="btn btn-light btn-sm mt-2" id="btnAbsenPulang" onclick="capturePhoto('pulang')">
+                            <i class="fas fa-camera"></i> Absen Pulang
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
     </div>
      <!-- video Kamera masuk-->
-    <div class="mt-4 text center">
-        <video id="video" width="320" height="240" autoplay></video>
-        <canvas id="canvas" width="320" height="240" style="display: none"></canvas>
-        <img id="previewFoto" src="" width="320" height="240" style="display: none; margin-top:10; border: 2px solid white;"/> <!--pengambil cekrek foto-->
-
-        <button type="button" id="btnAmbilFoto" onclick="ambilFoto()" style="display: none;" class="btn-primary mt-2">
-            Ambil Foto
+    
+    <!-- Kamera dan Preview Foto -->
+    <div class="text-center my-4">
+        <video id="video" width="320" height="240" autoplay class="rounded shadow"></video>
+        <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+        <img id="previewFoto" src="" width="320" height="240" style="display: none; margin-top: 10px;" class="rounded shadow border border-light" />
+        <br>
+        <button type="button" id="btnAmbilFoto" onclick="ambilFoto()" style="display: none;" class="btn btn-primary mt-3">
+            <i class="fas fa-camera-retro"></i> Ambil Foto
         </button>
     </div>
 
-    <!--form Presensi-->
-   
-     <form action="{{ route('karyawan.absensi.store') }}" method="post"> 
-      
-    @csrf
-        <!--input tersembnyi untk di kirmkan ke serve -->
-       {{--}} <input type="hidden" name="name" id="name"> --}}
-     {{--}}  <input type="hidden" name="name" id="name" value="{{ Auth::user()->name }}">  pakai--}} 
-       <input type="hidden" name="name" id="name" value=" {{ Auth::user()->karyawan->name ?? Auth::user()->name }}"> {{--baru--}}
-        
+    <!-- Form Kirim Absen -->
+    <form action="{{ route('karyawan.absensi.store') }}" method="POST" class="text-center">
+        @csrf
+        <input type="hidden" name="name" value="{{ Auth::user()->karyawan->name ?? Auth::user()->name }}">
         <input type="hidden" name="tipe" id="tipe">
         <input type="hidden" name="foto" id="foto">
         <input type="hidden" name="lokasi" id="lokasi">
         <input type="hidden" name="jam" id="jam">
-       {{--}} <input type="hidden" name="status" id="status" value=""> --}}
-
-
-        <button type="submit" id="btnSubmit" style="margin-top:10px;">Kirim Absen</button>
+        <button type="submit" id="btnSubmit" style="display: none;" class="btn btn-success mt-3">
+            <i class="fas fa-paper-plane"></i> Kirim Absen
+        </button>
     </form>
 
-{{--}}
-@if(session('error'))
-    <div class="d-flex justify-content-center">
-        
-        <div class="alert alert-danger alert-dismissible fade show shadow rounded-3 px-4 py-3 d-flex align-items-center gap-3"
-            role="alert"
-            style="max-width: 800px; border-left: 5px solid #dc3545;" 
-            <i class="bi bi-x-circle-fill fs-4 text-danger"></i>
-            <div>
-                <strong class="d-block">Gagal!</strong>
-                <span>{{ session('error') }}</span>
-            </div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-@endif
---}}
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-
-
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-{{--}}
-        <!-- Tampilkan riwayat absen dari database -->
-        @if (isset($absensi_terakhir) && count($absensi_terakhir) > 0)
-            <h4 class="mt-5">Riwayat Absen Terakhir</h4>
-            
-                <table class="table table-bordered md-3">
-                    <thead class="thead-dark">
-            
-                        <tr>
-                            <th>Tipe</th>
-                            <th>Foto</th>
-                            <th>Lokasi</th>
-                            <th>Jam</th>
-                            <th>Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($absensi_terakhir as $absen)
-                            <tr>
-                                <td>{{ $absen->tipe }}</td>
-                                <td>
-                                    <img src="{{ asset($absen->foto) }}" width="100" onerror="this.style.border='3px solid red';">
-                                </td>
-                                <td>{{ $absen->lokasi }}</td>
-                                <td>{{ $absen->jam }}</td>
-                                <td>{{ $absen->created_at->format('d-m-Y H:i:s') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <!-- Notifikasi -->
+   {{--}}
+    @if(session('error'))
+        <div class="alert alert-danger mt-4">{{ session('error') }}</div>
     @endif
-    --}}
-   
 
+    
+    @if(session('success'))
+        <div class="alert alert-success mt-4">{{ session('success') }}</div>
+    @endif --}}
 
+      @if(session('success'))
+    <script>
+        Swal.fire('Berhasil','{{ session('success') }}','success');
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        Swal.fire('Gagal','{{ session('error') }}','error');
+    </script>
+    @endif
+
+      
+    
+</div>
 </div>
 
 

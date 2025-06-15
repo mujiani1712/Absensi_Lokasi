@@ -292,6 +292,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route ('admin.gaji')}}" class="nav-link">
+                                <i class="nav-icon bi bi-palette"></i>
+                                <p>Gaji Karyawan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route ('admin.laporan')}}" class="nav-link">
                                 <i class="nav-icon bi bi-palette"></i>
                                 <p>Laporan</p>
@@ -774,6 +780,9 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {

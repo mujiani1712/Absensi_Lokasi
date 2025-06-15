@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('izins', function (Blueprint $table) {
-              $table->string('status')->default('pending');
-            //
+        Schema::table('absensis', function (Blueprint $table) {
+              if (!Schema::hasColumn('absensis', 'status')) {
+                $table->string('status')->default('hadir')->after('jam'); 
+            }
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('izins', function (Blueprint $table) {
+        Schema::table('absensis', function (Blueprint $table) {
             //
         });
     }
