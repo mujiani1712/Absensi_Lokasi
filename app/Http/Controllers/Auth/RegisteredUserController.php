@@ -36,13 +36,32 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-         /* pakai
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        */
+         //blokir kalau ada register dengan email yg sama dgn admin
+        if ($request->email === 'tokoh@gmail.com') {
+        return back()->withErrors(['email' => 'Email ini tidak bisa digunakan untuk registrasi.']);}
+
+
+        /*
+         User::create([
+        'name' => 'Admin',
+       // 'email' => 'admin@namatoko.com',
+       'email' => 'tokoh@gmail.com',
+        'password' => Hash::make('passwordadmin'),
+        'role' => 'admin'
+    ]);
+    */
+         if (!User::where('email', 'tokoh@gmail.com')->exists()) {
+    User::create([
+        'name' => 'Admin',
+        'email' => 'tokoh@gmail.com',
+        'password' => Hash::make('passwordadmin'),
+        'role' => 'admin'
+    ]);
+}
+
+
+
+        
 
            $user = User::create([  //tmb
         'name' => $request->name,
@@ -57,11 +76,6 @@ class RegisteredUserController extends Controller
         'email' => $user->email,
         'password' => $user->password // jika perlu, atau hapus jika tidak perlu disimpan lagi
     ]);
-
-
-
-   
-
 
         event(new Registered($user));
 

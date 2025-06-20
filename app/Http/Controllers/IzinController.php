@@ -21,16 +21,25 @@ class IzinController extends Controller
         
     $user = Auth::user(); 
     $karyawan = $user->karyawan;
+
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_izin' => 'required|date',
             'tanggal_berakhir_izin' => 'required|date',
             'keterangan' => 'required|string',
+            'lampiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+
              
         ]);
 
-        
+        $lampiranPath = null;
 
+    if ($request->hasFile('lampiran')) {
+        $lampiranPath = $request->file('lampiran')->store('lampiran', 'public');
+    }
+
+
+    
         Izin::create([
             'karyawan_id' => $karyawan->id,
             'name' => $karyawan->name,
@@ -39,6 +48,7 @@ class IzinController extends Controller
             'tanggal_berakhir_izin' =>$request ->tanggal_berakhir_izin,
             'keterangan' =>$request ->keterangan,
                'status' => 'pending', //br
+               'lampiran' => $lampiranPath,
             
         ]);
         return redirect()->back()->with('success','Data berhasil di simpan.');

@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">Rekap Pengajuan Izin</div>
     <div class="card-body">
-            {{--}}
+            {{--
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif --}}
@@ -27,6 +27,7 @@
                     <th>Tanggal Izin</th>
                     <th>Tanggal Berakhir</th>
                     <th>Keterangan</th>
+                    <th>Lampiran</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -39,6 +40,15 @@
                         <td>{{ $data->tanggal_izin }}</td>
                         <td>{{ $data->tanggal_berakhir_izin }}</td>
                         <td>{{ $data->keterangan }}</td>
+                         <td>
+                               @if ($data->lampiran)
+                                  <a href="{{ asset('storage/' . $data->lampiran) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            Lihat
+                                    </a>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                         </td>
                         <td>{{ ucfirst($data->status) }}</td>
                         <td>
                             @if ($data->status == 'pending')

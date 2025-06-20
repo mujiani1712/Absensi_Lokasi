@@ -1,30 +1,17 @@
 @extends('layouts.templatekaryawan')
+
 @section('content')
 <div class="container-fluid">
+    {{-- Card Form Izin --}}
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Form Pengajuan Izin</h5>
         </div>
         <div class="card-body">
-            {{--}}
-            {{-- Notifikasi
-            @if(session('success'))
-                <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>{{ session('success') }}</div>
-            @endif
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong><i class="fas fa-exclamation-triangle me-2"></i>Terjadi kesalahan:</strong>
-                    <ul class="mb-0 mt-2">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif --}}
-
+            {{-- SweetAlert Notifikasi --}}
             <script>
-            window.onload = function () {
+                window.onload = function () {
                     @if(session('success'))
                         Swal.fire('Berhasil', '{{ session('success') }}', 'success');
                     @endif
@@ -41,7 +28,7 @@
 
             {{-- Form Izin --}}
             <div id="formIzin" style="display: none;">
-                <form method="post" action="{{ route('karyawan.izin') }}">
+                <form method="post" action="{{ route('karyawan.izin') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -60,6 +47,10 @@
                             <label for="keterangan">Keterangan</label>
                             <input type="text" class="form-control" name="keterangan" value="{{ old('keterangan') }}" required>
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="lampiran">Lampiran (Opsional)</label>
+                            <input type="file" class="form-control" name="lampiran" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
                         <div class="col-12">
                             <button class="btn btn-success" type="submit"><i class="fas fa-paper-plane me-1"></i> Submit</button>
                         </div>
@@ -69,7 +60,7 @@
         </div>
     </div>
 
-    {{-- Tabel Riwayat Izin --}}
+    {{-- Card Tabel Riwayat --}}
     <div class="card shadow-sm">
         <div class="card-header bg-secondary text-white">
             <h5 class="mb-0"><i class="fas fa-history me-2"></i> Riwayat Pengajuan Izin</h5>
@@ -84,6 +75,7 @@
                             <th>Tanggal Izin</th>
                             <th>Tanggal Berakhir</th>
                             <th>Keterangan</th>
+                            <th>Lampiran</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -95,6 +87,15 @@
                                 <td>{{ \Carbon\Carbon::parse($data->tanggal_izin)->format('d-m-Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->tanggal_berakhir_izin)->format('d-m-Y') }}</td>
                                 <td>{{ $data->keterangan }}</td>
+                                <td>
+                                    @if ($data->lampiran)
+                                        <a href="{{ asset('storage/' . $data->lampiran) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            Lihat
+                                        </a>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                                 <td>
                                     @if($data->status == 'disetujui')
                                         <span class="badge bg-success">Disetujui</span>
@@ -108,7 +109,7 @@
                         @endforeach
                         @if($izin->isEmpty())
                             <tr>
-                                <td colspan="6" class="text-center">Belum ada data pengajuan izin.</td>
+                                <td colspan="7" class="text-center">Belum ada data pengajuan izin.</td>
                             </tr>
                         @endif
                     </tbody>
@@ -118,7 +119,7 @@
     </div>
 </div>
 
-{{-- Toggle Form --}}
+{{-- Script Toggle Form --}}
 <script>
     function formDataIzin() {
         const form = document.getElementById('formIzin');

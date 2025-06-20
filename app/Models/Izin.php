@@ -15,7 +15,8 @@ class Izin extends Model
         'tanggal_izin',
         'tanggal_berakhir_izin',
         'keterangan',
-        'status'
+        'status',
+        'lampiran',
     ];
     public function karyawan()
     {
