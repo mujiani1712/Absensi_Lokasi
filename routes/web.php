@@ -5,7 +5,7 @@ use App\Http\Controllers\AprovalizinController;
 use App\Http\Controllers\JamKerjaController;
 use App\Http\Controllers\LokasiAbsensiController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\GajiController;
+use App\Http\Controllers\GajiiController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LaporanController;
@@ -63,8 +63,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
    // Route::post('admin/aprovaizin/{id}/{status}', [AprovalizinController::class, 'updateStatus'])->name('admin.aprovalizin.update');
    Route::patch('/admin/aprovalizin/update/{id}/{status}', [AprovalizinController::class, 'updateStatus'])->name('admin.aprovalizin.update');
 
-    Route::get('/admin/gaji', [GajiController::class, 'index'])->name('admin.gaji');
-    Route::get('/admin/gaji', [LaporanController::class, 'laporanGaji'])->name('admin.gaji');
+    Route::get('/admin/gaji', [RekapanController::class, 'gaji'])->name('admin.gaji');
+
+    //Route::get('/admin/gaji', [GajiiController::class, 'index'])->name('admin.gaji');
+    //Route::get('/admin/gaji', [LaporanController::class, 'laporanGaji'])->name('admin.gaji');
 
 
      Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('admin.laporan');

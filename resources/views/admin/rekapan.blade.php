@@ -25,6 +25,8 @@
                     <th scope="col">Jam Masuk</th>
                     <th scope="col">Foto Pulang</th>
                     <th scope="col">Jam Pulang</th>
+                     <th scope="col">Keterangan</th>
+                     <th scope="col">Lampiran</th> 
                     <th scope="col">Status</th>
                 </tr>
             </thead>
@@ -52,6 +54,17 @@
                         @endif
                     </td>
                     <td>{{ $item['jam_pulang'] }}</td>
+                    {{-- <td>{{ $item['keterangan'] }}</td> --}} 
+                    <td>{{ $item['keterangan'] ?? '-' }}</td>
+
+
+                   <td>
+                   @if ($item['lampiran'])
+                <a href="{{ asset('storage/' . $item['lampiran']) }}" target="_blank">Lihat</a>
+                 @else
+                <span>-</span>
+                 @endif
+                </td>
                     <td>{{ $item['status'] }}</td>
                 </tr>
                 @endforeach

@@ -33,13 +33,13 @@ class Karyawan extends Model
     return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
 }
 
-/*
+
 public function izin()
 {
-    //return $this->hasMany(Absensi::class, 'user_id');// PKAI
+    //return $this->hasMany(Absensi::class, 'user_id'); // PKAI
     return $this->hasMany(izin::class, 'karyawan_id', 'id');
 }
-    */
+    
     
    
 }
