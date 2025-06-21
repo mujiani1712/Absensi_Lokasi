@@ -6,7 +6,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE v4 | Dashboard</title>
+    <title></title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE v4 | Dashboard" />
@@ -55,8 +55,8 @@
                             <i class="bi bi-list"></i>
                         </a>
                     </li>
-                    <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Homee</a></li>
-                    <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+                    <li class="nav-item d-none d-md-block"><a href="#" class="nav-link"></a></li>
+                    <li class="nav-item d-none d-md-block"><a href="#" class="nav-link"></a></li>
                 </ul>
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
@@ -235,18 +235,18 @@
             <!--end::Container-->
         </nav>
         <!--end::Header-->
-        <!--begin::Sidebar-->
+        <!--begin::Sidebar--> 
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
             <!--begin::Sidebar Brand-->
             <div class="sidebar-brand">
                 <!--begin::Brand Link-->
                 <a href="./index.html" class="brand-link">
                     <!--begin::Brand Image-->
-                    <img src="../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo"
+                    <img src="../../dist/assets/img/AdminLTELogo.png" alt="Admin"
                         class="brand-image opacity-75 shadow" />
                     <!--end::Brand Image-->
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">AdminLTE 4</span>
+                    <span class="brand-text fw-light"></span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
@@ -259,16 +259,16 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
+                                 <a href="{{ route('admin.dashboard') }}" class="nav-link">
                                 <i class="nav-icon bi bi-speedometer"></i>
                                 <p>
                                     Dashboard Admin
-                                   {{--}} <i class="nav-arrow bi bi-chevron-right"></i> --}}
+                                   {{-- <i class="nav-arrow bi bi-chevron-right"></i> --}}
                                 </p>
                             </a>
-                            {{--}}
+                            {{--
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item">  
                                     <a href="./index.html" class="nav-link active">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Dashboard v1</p>
@@ -304,7 +304,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./generate/theme.html" class="nav-link">
+                            <a href="{{ route ('admin.dataKaryawan')}}" class="nav-link">
                                 <i class="nav-icon bi bi-palette"></i>
                                 <p>Tambah Karyawan</p>
                             </a>

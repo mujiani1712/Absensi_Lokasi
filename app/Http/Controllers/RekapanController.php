@@ -55,7 +55,7 @@ class RekapanController extends Controller
 
            */
            // Tentukan status
-                /*if ($masuk && $pulang) {
+                if ($masuk && $pulang) {
                     $status = 'Hadir';
                 } elseif ($masuk && !$pulang) {
                     $status = 'Belum Pulang';
@@ -63,14 +63,25 @@ class RekapanController extends Controller
                     $status = 'Hadir'; // atau "Sakit"
                 } else {
                     $status = 'Alpha';
+                }
+
+                /*if ($masuk && $pulang) {
+                    $status = 'Hadir';
+                } elseif ($masuk && !$pulang) {
+                // Cek apakah sekarang sudah lewat jam pulang
+                    if (now()->format('H:i:s') > $jamPulang) {
+                 $status = 'Alpha'; // karena belum absen pulang walau sudah waktunya
+                    } else {
+                 $status = 'Belum Pulang';
                 }*/
-                if ($masuk) {
+
+                /*if ($masuk) {
                     $status = 'Hadir';
                 } elseif ($izin) {
                     $status = 'Hadir'; // atau isi 'Sakit', 'Izin', dst sesuai kebutuhan
                 } else {
                     $status = 'Alpha';
-                }
+                }*/
 
 
             $absen[] = [
@@ -92,7 +103,7 @@ class RekapanController extends Controller
     return view('admin.rekapan', compact('absen', 'tanggal'));
 }
         // ✅ Tambahan fungsi untuk perhitungan gaji
-    public function gaji()
+    /*public function gaji()
 {
     $karyawans = Karyawan::all();
     $tanggalAwal = Carbon::now()->startOfMonth();
@@ -138,7 +149,7 @@ class RekapanController extends Controller
     }
 
     return view('admin.gaji', compact('gajiData'));
-}
+}*/
 
 }
 

@@ -15,7 +15,12 @@ class Karyawan extends Model
         'user_id',
         'name',
         'email',
-        'password'
+        'password',
+        'tanggal_masuk',
+        'no_telp',
+        'jenis_kelamin',
+        'tanggal_lahir',
+        'alamat'
         
     ];
 

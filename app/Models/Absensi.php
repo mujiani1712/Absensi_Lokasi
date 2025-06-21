@@ -19,14 +19,6 @@ class Absensi extends Model
        'status'
     ];
 
-
-    /*ts
-     public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-    */
-
     public function karyawan()
     {
 

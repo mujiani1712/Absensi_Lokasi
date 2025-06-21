@@ -6,7 +6,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE v4 | Dashboard</title>
+    <title></title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE v4 | Dashboard" />
@@ -266,11 +266,11 @@
                 <!--begin::Brand Link-->
                 <a href="./index.html" class="brand-link">
                     <!--begin::Brand Image-->
-                    <img src="../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo"
+                    <img src=""alt="Karyawan"
                         class="brand-image opacity-75 shadow" />
                     <!--end::Brand Image-->
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">AdminLTE 4</span>
+                    <span class="brand-text fw-light"></span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
@@ -282,8 +282,8 @@
                     <!--begin::Sidebar Menu-->
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
-                        <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
+                        <li class="nav-item menu-open"> 
+                              <a href="{{ route('karyawan.dashboard') }}" class="nav-link">
                                 <i class="nav-icon bi bi-speedometer"></i>
                                 <p>
                                     Dashboard  karyawan
@@ -602,7 +602,7 @@
           
             <strong>
                 Copyright &copy; 2014-2024&nbsp;
-                <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+                <a href="https://adminlte.io" class="text-decoration-none"></a>.
             </strong> ---}}
          
             <!--end::Copyright-->

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -34,6 +35,13 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            /*
+            'no_telp' => ['required', 'string'],
+            'jenis_kelamin' => ['required'],
+            'tanggal_lahir' => ['required', 'date'],
+            'alamat' => ['required', 'string'],
+            'tanggal_masuk' => ['required', 'date'],
+            */
         ]);
 
          //blokir kalau ada register dengan email yg sama dgn admin
@@ -50,31 +58,38 @@ class RegisteredUserController extends Controller
         'role' => 'admin'
     ]);
     */
-         if (!User::where('email', 'tokoh@gmail.com')->exists()) {
-    User::create([
-        'name' => 'Admin',
-        'email' => 'tokoh@gmail.com',
-        'password' => Hash::make('passwordadmin'),
-        'role' => 'admin'
-    ]);
-}
-
-
-
-        
-
+         
            $user = User::create([  //tmb
         'name' => $request->name,
         'email' => $request->email,
+        'no_telp' => $request->no_telp,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'tanggal_lahir' => $request->tanggal_lahir,
+        'alamat' => $request->alamat,
+        'tanggal_masuk' => $request->tanggal_masuk,
         'password' => Hash::make($request->password),
         'role' => 'karyawan' // pastikan role default diisi karyawan
     ]);
         
-    Karyawan::create([ //tmb
+    /*Karyawan::create([ //tmb
         'user_id' => $user->id,
         'name' => $user->name,
         'email' => $user->email,
         'password' => $user->password // jika perlu, atau hapus jika tidak perlu disimpan lagi
+    ]);*/
+
+    Karyawan::create([
+        'user_id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        /*
+        'no_telp' => $request->no_telp,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'tanggal_lahir' => $request->tanggal_lahir,
+        'alamat' => $request->alamat,
+        'tanggal_masuk' => $request->tanggal_masuk,
+        */
+    // Field lain dibiarkan kosong/null dulu, nanti diisi admin
     ]);
 
         event(new Registered($user));
@@ -88,3 +103,4 @@ class RegisteredUserController extends Controller
 
     }
 }
+

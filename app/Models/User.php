@@ -18,10 +18,15 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
+         'name',
+         'email',
         'password',
-        'role'
+        'role',
+        'no_telp',
+        'jenis_kelamin',
+        'tanggal_masuk',
+        'tanggal_lahir',
+        'alamat'
     ];
 
     /**
@@ -57,5 +62,6 @@ class User extends Authenticatable
         public function karyawan()
 {
     return $this->hasOne(Karyawan::class, 'user_id'); // pastikan user_id benar
+     
 }
 }

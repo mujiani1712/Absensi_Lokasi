@@ -5,6 +5,7 @@ use App\Http\Controllers\AprovalizinController;
 use App\Http\Controllers\JamKerjaController;
 use App\Http\Controllers\LokasiAbsensiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DataKaryawanController;
 use App\Http\Controllers\GajiiController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KaryawanController;
@@ -15,11 +16,6 @@ use App\Http\Controllers\RiwayatController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-
-
-
-
 
 
 Route::get('/', function () {
@@ -44,7 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
  
     // route admin lainnya
     Route::get('/admin/lokasiabsensi', [LokasiAbsensiController::class, 'index'])->name('admin.lokasiabsensi');
@@ -63,7 +59,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
    // Route::post('admin/aprovaizin/{id}/{status}', [AprovalizinController::class, 'updateStatus'])->name('admin.aprovalizin.update');
    Route::patch('/admin/aprovalizin/update/{id}/{status}', [AprovalizinController::class, 'updateStatus'])->name('admin.aprovalizin.update');
 
-    Route::get('/admin/gaji', [RekapanController::class, 'gaji'])->name('admin.gaji');
+    Route::get('/admin/gaji', [GajiiController::class, 'gaji'])->name('admin.gaji');
 
     //Route::get('/admin/gaji', [GajiiController::class, 'index'])->name('admin.gaji');
     //Route::get('/admin/gaji', [LaporanController::class, 'laporanGaji'])->name('admin.gaji');
@@ -71,6 +67,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
      Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
        Route::get('/admin/laporan', [LaporanController::class, 'laporanKehadiran'])->name('admin.laporan');
+       Route::get('/admin/dataKaryawan', [DataKaryawanController::class, 'index'])->name('admin.dataKaryawan');
+       Route::post('/admin/dataKaryawan', [DataKaryawanController::class, 'store'])->name('admin.dataKaryawan');
+    
     
 });
 
