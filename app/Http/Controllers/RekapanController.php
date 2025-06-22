@@ -157,7 +157,10 @@ public function index(Request $request)
 }
 
 */
-    public function index(Request $request)
+
+
+
+public function index(Request $request)
 {
     $tanggal = $request->input('tanggal');
     $karyawans = Karyawan::all();
@@ -179,6 +182,13 @@ public function index(Request $request)
 
     foreach ($tanggalList as $tgl) {
         foreach ($karyawans as $karyawan) {
+
+            // 👉 Lewati tanggal sebelum karyawan mulai kerja
+        if ($karyawan->tanggal_mulai && $tgl->lt(Carbon::parse($karyawan->tanggal_mulai))) {
+            continue;
+        }
+
+
             $absensis = $karyawan->absensi()
                 ->whereDate('created_at', $tgl->toDateString())
                 ->get();
@@ -208,8 +218,6 @@ public function index(Request $request)
 
     return view('admin.rekapan', compact('absen', 'tanggal'));
 }
-
-
     
 
 }

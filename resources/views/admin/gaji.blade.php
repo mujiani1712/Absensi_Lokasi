@@ -4,9 +4,10 @@
 
 <h1>Gaji Karyawan</h1>
 
+    {{--}}
     <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Perhitungan Gaji</h3>
+        <h3 class="card-title">Gaji Karyawan</h3>
     </div>
     <div class="card-body">
      <table class="table table-bordered">
@@ -35,6 +36,64 @@
     </table>
     </div>
     </div>
+    --}}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rekap Gaji Bulan {{ \Carbon\Carbon::parse($periode)->translatedFormat('F Y') }}</h3>
+    </div>
+
+    <div class="card-body">
+       
+        <form method="POST" action="{{ route('admin.gaji.store') }}">
+            @csrf
+            <button class="btn btn-success mb-3" onclick="return confirm('Hitung ulang gaji bulan ini?')">
+                Hitung Gaji Bulan Ini
+            </button>
+        </form>
+
+       
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th>No</th>
+                    <th>periode,</th>
+                    <th>Nama Karyawan</th>
+                    <th>Hadir</th>
+                    <th>Alpha</th>
+                    <th>Sakit</th>
+                    <th>Gaji Pokok</th>
+                    <th>Potongan</th>
+                    <th>Gaji Bersih</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($data as $i => $item)
+                    <tr>
+                        <td class="text-center">{{ $i + 1 }}</td>
+                         <td>{{ \Carbon\Carbon::parse($item->periode)->translatedFormat('F Y') }}</td> 
+                        <td>{{ $item->karyawan->name ?? '-' }}</td>
+                       
+                        <td class="text-center">{{ $item->hadir }}</td>
+                        <td class="text-center">{{ $item->alpha }}</td>
+                        <td class="text-center">{{ $item->sakit }}</td>
+                        <td class="text-right">Rp {{ number_format($item->gaji_pokok, 0, ',', '.') }}</td>
+                        <td class="text-right text-danger">-Rp {{ number_format($item->potongan, 0, ',', '.') }}</td>
+                        <td class="text-right text-success">Rp {{ number_format($item->gaji_bersih, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Belum ada data gaji bulan ini.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 
 
 

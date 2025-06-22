@@ -283,7 +283,8 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
+                            
+                                 <a href="{{ route('karyawan.dashboard') }}" class="nav-link">
                                 <i class="nav-icon bi bi-speedometer"></i>
                                 <p>
                                     Dashboard  karyawan

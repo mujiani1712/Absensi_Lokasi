@@ -5,6 +5,7 @@ use App\Http\Controllers\AprovalizinController;
 use App\Http\Controllers\JamKerjaController;
 use App\Http\Controllers\LokasiAbsensiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminDataKaryawanController;
 use App\Http\Controllers\GajiController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KaryawanController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RiwayatController;
-
+use App\Models\Gaji;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -64,12 +65,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
    Route::patch('/admin/aprovalizin/update/{id}/{status}', [AprovalizinController::class, 'updateStatus'])->name('admin.aprovalizin.update');
 
     Route::get('/admin/gaji', [GajiController::class, 'index'])->name('admin.gaji');
-    Route::get('/admin/gaji', [LaporanController::class, 'laporanGaji'])->name('admin.gaji');
+   // Route::get('/admin/gaji', [LaporanController::class, 'laporanGaji'])->name('admin.gaji');
+     
+    Route::post('/admin/gaji', [GajiController::class, 'store'])->name('admin.gaji.store');
 
 
      Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
        Route::get('/admin/laporan', [LaporanController::class, 'laporanKehadiran'])->name('admin.laporan');
     
+    // DATA KARYAWAN
+    Route::get('/admin/dataKaryawan/index', [AdminDataKaryawanController::class, 'index'])->name('admin.dataKaryawan.index');
+Route::get('/admin/dataKaryawan/create', [AdminDataKaryawanController::class, 'create'])->name('admin.dataKaryawan.create');
+Route::post('/admin/dataKaryawan', [AdminDataKaryawanController::class, 'store'])->name('admin.dataKaryawan.store');
+     
 });
 
 

@@ -37,6 +37,9 @@
     <!-- jsvectormap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
+
+
+        
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -304,7 +307,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./generate/theme.html" class="nav-link">
+                            <a href="{{ route('admin.dataKaryawan.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-palette"></i>
                                 <p>Tambah Karyawan</p>
                             </a>
@@ -747,6 +750,7 @@
         <!--begin::App Main-->
         <main class="app-main">
             @yield('content')
+             @stack('scripts')
         </main>
         <!--end::App Main-->
         <!--begin::Footer-->
@@ -780,6 +784,9 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

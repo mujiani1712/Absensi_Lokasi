@@ -55,7 +55,7 @@ class RegisteredUserController extends Controller
         'user_id' => $user->id,
         'name' => $user->name,
         'email' => $user->email,
-        'password' => $user->password // jika perlu, atau hapus jika tidak perlu disimpan lagi
+        'password' => $user->password 
     ]);
 
 
