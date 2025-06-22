@@ -33,17 +33,27 @@ class GajiiController extends Controller
             $alpha = 0;
 
             foreach ($tanggalList as $tanggal) {
-                $absenMasuk = $karyawan->absensi()->whereDate('created_at', $tanggal)->first();
+                //$absenMasuk = $karyawan->absensi()->whereDate('created_at', $tanggal)->first();
+                $absen = $karyawan->absensi()->whereDate('created_at', $tanggal)->first();
+
                 $izin = $karyawan->izin()
                     ->whereDate('tanggal_izin', '<=', $tanggal)
                     ->whereDate('tanggal_berakhir_izin', '>=', $tanggal)
                     ->exists();
 
-                if ($absenMasuk || $izin) {
+               /* if ($absenMasuk || $izin) {
                     $hadir++;
                 } else {
                     $alpha++;
-                }
+                }*/
+                // bru ditmbhkn
+                if ($absen && $absen->jam_masuk && $absen->jam_pulang) {
+                    $hadir++;
+                } elseif ($izin) {
+                     $hadir++;
+                } else {
+                     $alpha++;
+        }
             }
 
             $gajiPokok = 3000000;

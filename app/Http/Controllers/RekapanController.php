@@ -11,14 +11,21 @@ class RekapanController extends Controller
     public function index(Request $request)
 {
     $tanggal = $request->input('tanggal');
-    $karyawans = Karyawan::all();
+    $search = $request->input('search'); // tambahkan ini
+
+    // Ambil karyawan, filter jika ada pencarian nama
+    $karyawans = Karyawan::query()
+        ->when($search, function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })
+        ->get();
+
     $absen = [];
 
+    // Tentukan daftar tanggal
     if ($tanggal) {
-        // Jika cari tanggal tertentu
         $tanggalList = [Carbon::parse($tanggal)];
     } else {
-        // Jika tidak pilih tanggal, ambil semua dari awal bulan sampai hari ini
         $tanggalAwal = Carbon::now()->startOfMonth();
         $tanggalAkhir = Carbon::now()->startOfDay();
         $tanggalList = [];
@@ -28,61 +35,30 @@ class RekapanController extends Controller
         }
     }
 
+    // Looping data absen
     foreach ($tanggalList as $tgl) {
         foreach ($karyawans as $karyawan) {
             $absensis = $karyawan->absensi()
                 ->whereDate('created_at', $tgl->toDateString())
                 ->get();
-            
 
             $masuk = $absensis->firstWhere('tipe', 'masuk');
             $pulang = $absensis->firstWhere('tipe', 'pulang');
 
-                // Ambil izin
-                $izin = $karyawan->izin()
-                    ->whereDate('tanggal_izin', '<=', $tgl->toDateString())
-                    ->whereDate('tanggal_berakhir_izin', '>=', $tgl->toDateString())
-                    ->first();
+            $izin = $karyawan->izin()
+                ->whereDate('tanggal_izin', '<=', $tgl->toDateString())
+                ->whereDate('tanggal_berakhir_izin', '>=', $tgl->toDateString())
+                ->first();
 
-            /*
-            // Penentuan status:
-            $status = 'Alpha';
             if ($masuk && $pulang) {
                 $status = 'Hadir';
             } elseif ($masuk && !$pulang) {
                 $status = 'Belum Pulang';
+            } elseif ($izin) {
+                $status = 'Hadir';
+            } else {
+                $status = 'Alpha';
             }
-
-           */
-           // Tentukan status
-                if ($masuk && $pulang) {
-                    $status = 'Hadir';
-                } elseif ($masuk && !$pulang) {
-                    $status = 'Belum Pulang';
-                } elseif ($izin) {
-                    $status = 'Hadir'; // atau "Sakit"
-                } else {
-                    $status = 'Alpha';
-                }
-
-                /*if ($masuk && $pulang) {
-                    $status = 'Hadir';
-                } elseif ($masuk && !$pulang) {
-                // Cek apakah sekarang sudah lewat jam pulang
-                    if (now()->format('H:i:s') > $jamPulang) {
-                 $status = 'Alpha'; // karena belum absen pulang walau sudah waktunya
-                    } else {
-                 $status = 'Belum Pulang';
-                }*/
-
-                /*if ($masuk) {
-                    $status = 'Hadir';
-                } elseif ($izin) {
-                    $status = 'Hadir'; // atau isi 'Sakit', 'Izin', dst sesuai kebutuhan
-                } else {
-                    $status = 'Alpha';
-                }*/
-
 
             $absen[] = [
                 'tanggal' => $tgl->toDateString(),
@@ -91,17 +67,16 @@ class RekapanController extends Controller
                 'foto_masuk' => $masuk->foto ?? null,
                 'jam_pulang' => $pulang->jam ?? '-',
                 'foto_pulang' => $pulang->foto ?? null,
-
-                'keterangan' => $izin?->keterangan ?? '-', // ambil dari tabel izin
-                'lampiran' => $izin?->lampiran ?? null,     // ambil dari tabel izin
-
+                'keterangan' => $izin?->keterangan ?? '-',
+                'lampiran' => $izin?->lampiran ?? null,
                 'status' => $status,
             ];
         }
     }
 
-    return view('admin.rekapan', compact('absen', 'tanggal'));
+    return view('admin.rekapan', compact('absen', 'tanggal', 'search'));
 }
+
         // ✅ Tambahan fungsi untuk perhitungan gaji
     /*public function gaji()
 {

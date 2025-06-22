@@ -16,11 +16,11 @@ class Karyawan extends Model
         'name',
         'email',
         'password',
-        'tanggal_masuk',
         'no_telp',
         'jenis_kelamin',
         'tanggal_lahir',
-        'alamat'
+        'alamat',
+        'tanggal_masuk'
         
     ];
 

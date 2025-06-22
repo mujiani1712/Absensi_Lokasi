@@ -11,9 +11,15 @@
         <form method="GET" action="{{ route('admin.rekapan') }}" class="mb-3">
            {{--}} <input type="date" name="tanggal" value="{{ $tanggal }}" required> --}}
            <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}" >
+             
+           <div class="col-md-4">
+        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Cari nama karyawan">
+            </div>
 
-            
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <div class="col-md-4">
+        <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+
         </form>
 
         <table class="table table-bordered">

@@ -30,77 +30,53 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            /*
-            'no_telp' => ['required', 'string'],
-            'jenis_kelamin' => ['required'],
-            'tanggal_lahir' => ['required', 'date'],
-            'alamat' => ['required', 'string'],
-            'tanggal_masuk' => ['required', 'date'],
-            */
-        ]);
-
-         //blokir kalau ada register dengan email yg sama dgn admin
-        if ($request->email === 'tokoh@gmail.com') {
-        return back()->withErrors(['email' => 'Email ini tidak bisa digunakan untuk registrasi.']);}
-
-
-        /*
-         User::create([
-        'name' => 'Admin',
-       // 'email' => 'admin@namatoko.com',
-       'email' => 'tokoh@gmail.com',
-        'password' => Hash::make('passwordadmin'),
-        'role' => 'admin'
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'no_telp' => ['required', 'string'],
+        'jenis_kelamin' => ['required'],
+        'tanggal_lahir' => ['required', 'date'],
+        'alamat' => ['required', 'string'],
+        // 'tanggal_masuk' tidak diperlukan karena admin yang input nanti
     ]);
-    */
-         
-           $user = User::create([  //tmb
+
+    // Blokir jika pakai email admin
+    if ($request->email === 'tokoh@gmail.com') {
+        return back()->withErrors(['email' => 'Email ini tidak bisa digunakan untuk registrasi.']);
+    }
+
+    // Simpan ke tabel users
+    $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
+        'password' => Hash::make($request->password),
         'no_telp' => $request->no_telp,
         'jenis_kelamin' => $request->jenis_kelamin,
         'tanggal_lahir' => $request->tanggal_lahir,
         'alamat' => $request->alamat,
-        'tanggal_masuk' => $request->tanggal_masuk,
-        'password' => Hash::make($request->password),
-        'role' => 'karyawan' // pastikan role default diisi karyawan
+        'tanggal_masuk' => null, // karena admin yang isi nanti
+        'role' => 'karyawan'
     ]);
-        
-    /*Karyawan::create([ //tmb
-        'user_id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'password' => $user->password // jika perlu, atau hapus jika tidak perlu disimpan lagi
-    ]);*/
 
+    // Simpan ke tabel karyawans dan hubungkan dengan user_id
     Karyawan::create([
         'user_id' => $user->id,
         'name' => $user->name,
         'email' => $user->email,
-        /*
-        'no_telp' => $request->no_telp,
-        'jenis_kelamin' => $request->jenis_kelamin,
-        'tanggal_lahir' => $request->tanggal_lahir,
-        'alamat' => $request->alamat,
-        'tanggal_masuk' => $request->tanggal_masuk,
-        */
-    // Field lain dibiarkan kosong/null dulu, nanti diisi admin
+        'no_telp' => $user->no_telp,
+        'jenis_kelamin' => $user->jenis_kelamin,
+        'tanggal_lahir' => $user->tanggal_lahir,
+        'alamat' => $user->alamat,
+        'tanggal_masuk' => null // nanti diisi oleh admin
     ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
+    Auth::login($user);
 
-        Auth::login($user); 
-      
+    return redirect()->route('login')->with('status', 'Registrasi berhasil, silakan login.');
+}
 
-         //return redirect()->route('karyawan.dashboard');  bnr
-          // return redirect()->route('dashboard'); // tmb
-          return redirect()->route('login')->with('status', 'Registrasi berhasil, silakan login.'); //tmb
-
-    }
 }
 
