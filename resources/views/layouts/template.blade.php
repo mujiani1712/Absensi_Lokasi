@@ -37,6 +37,15 @@
     <!-- jsvectormap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
+
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+   
+
+
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -747,6 +756,8 @@
         <!--begin::App Main-->
         <main class="app-main">
             @yield('content')
+
+             @stack('scripts') 
         </main>
         <!--end::App Main-->
         <!--begin::Footer-->
@@ -782,6 +793,9 @@
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
 
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

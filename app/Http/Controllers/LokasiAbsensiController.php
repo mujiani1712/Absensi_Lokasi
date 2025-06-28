@@ -2,44 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\LokasiAbsensi;
 use Illuminate\Http\Request;
-use Illuminate\Log;
 
 class LokasiAbsensiController extends Controller
 {
-    //
-    public function index(){
-        //return view('admin.lokasiabsensi');
-        # $users = User::userr()->get();
-    $lokasi = LokasiAbsensi::first();
-    return view('admin.lokasiabsensi', compact('lokasi'));
+    public function index()
+    {
+        $lokasis = LokasiAbsensi::all();
+        return view('admin.lokasiabsensi', compact('lokasis'));
     }
 
-   public function update(Request $request)
-{
-    $request->validate([
-        'nama_toko' => 'required|string',
-        'latitude' => 'required|numeric',
-        'longitude' => 'required|numeric',
-        'radius' => 'required|numeric',
-    ]);
-
-    try {
-        LokasiAbsensi::updateOrCreate(['id' => 1], [
-            'nama_toko' => $request->nama_toko,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'radius' => $request->radius,
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_toko' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'radius' => 'required|numeric',
         ]);
 
-        return redirect()->route('admin.lokasiabsensi')->with('success', 'Lokasi absensi berhasil diperbarui!');
-    } catch (\Exception $e) {
-        return redirect()->route('admin.lokasiabsensi')->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        try {
+            // Menambahkan lokasi baru
+            LokasiAbsensi::create([
+                'nama_toko' => $request->nama_toko,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'radius' => $request->radius,
+            ]);
+
+             LokasiAbsensi::create($request->all());
+
+            return redirect()->route('admin.lokasiabsensi')->with('success', 'Lokasi absensi berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.lokasiabsensi')->with('error', 'Gagal menambahkan lokasi: ' . $e->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        $lokasi = LokasiAbsensi::findOrFail($id);
+        return view('admin.editLokasiAbsensi', compact('lokasi'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_toko' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'radius' => 'required|numeric',
+        ]);
+
+        try {
+            $lokasi = LokasiAbsensi::findOrFail($id);
+            $lokasi->update([
+                'nama_toko' => $request->nama_toko,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'radius' => $request->radius,
+            ]);
+
+            return redirect()->route('admin.lokasiabsensi')->with('success', 'Lokasi absensi berhasil diperbarui!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.lokasiabsensi')->with('error', 'Gagal memperbarui lokasi: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        $lokasi = LokasiAbsensi::findOrFail($id);
+        $lokasi->delete();
+
+        return redirect()->route('admin.lokasiabsensi')->with('success', 'Lokasi berhasil dihapus.');
     }
 }
-
-}
-
-

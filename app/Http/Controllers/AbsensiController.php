@@ -95,6 +95,25 @@ class AbsensiController extends Controller
         // return redirect()->route('account.absensi')->with('error', 'Anda berada di luar area absensi (' . round($jarak) . ' meter dari toko).');
          return redirect()->route('karyawan.riwayat')->with('error', 'Anda berada di luar area absensi (' . round($jarak) . ' meter dari kantor).');
     }
+
+
+    // BARU DI TAMBA
+    $tanggalMasuk = Carbon::parse($karyawan->tanggal_masuk);
+$tanggalHariIni = Carbon::today();
+
+// Cek jika karyawan mencoba absen sebelum tanggal mulai kerja
+if ($tanggalHariIni->lt($tanggalMasuk)) {
+    return redirect()->route('karyawan.riwayat')->with('error', 'Anda belum mulai bekerja. Tanggal mulai kerja Anda adalah ' . $tanggalMasuk->format('Y-m-d'));
+}
+
+    
+    
+
+
+
+
+
+
         
     $jamkerja = Jamkerja::first(); 
     //$jamSekarang = Carbon::now();
@@ -167,8 +186,8 @@ class AbsensiController extends Controller
         'foto' => $publicPath,
         'lokasi' => $request->lokasi,
         'jam' => $request->jam,
-        'status' => $request->tipe === 'masuk' ? 'hadir' : null,
-       //'status' => $request->status ?? 'hadir' //bru tmb
+        //'status' => $request->tipe === 'masuk' ? 'hadir' : null,
+       'status' => $request->status ?? 'hadir' //bru tmb
         
     ]);
 
@@ -178,8 +197,8 @@ class AbsensiController extends Controller
         'foto' => asset('uploads/foto_absen/' . $filename),
         'lokasi' => $request->lokasi,
         'jam' => $request->jam,
-        'status' => $request->tipe === 'masuk' ? 'hadir' : null,
-       //'status' => $request->status ?? 'hadir' //tmb
+        //'status' => $request->tipe === 'masuk' ? 'hadir' : null,
+       'status' => $request->status ?? 'hadir' //tmb
     ];
 
     //session(['absen' => $absensData]);

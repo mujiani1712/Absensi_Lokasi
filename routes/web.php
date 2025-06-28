@@ -44,7 +44,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
  
     // route admin lainnya
     Route::get('/admin/lokasiabsensi', [LokasiAbsensiController::class, 'index'])->name('admin.lokasiabsensi');
-    Route::post('/admin/lokasiabsensi', [LokasiAbsensiController::class, 'update'])->name('admin.lokasiabsensi');
+    Route::post('/admin/lokasiabsensi', [LokasiAbsensiController::class, 'store'])->name('admin.lokasiabsensi.store');
+    Route::get('/admin/lokasiabsensi/{id}/edit', [LokasiAbsensiController::class, 'edit'])->name('admin.lokasiabsensi.edit');
+    Route::delete('/admin/lokasiabsensi/{id}', [LokasiAbsensiController::class, 'destroy'])->name('admin.lokasiabsensi.destroy');
+    Route::put('/admin/lokasiabsensi/{id}', [LokasiAbsensiController::class, 'update'])->name('admin.lokasiabsensi.update');
+
+
     Route::get('/admin/rekapan', [RekapanController::class, 'index'])->name('admin.rekapan');
   
     
@@ -69,6 +74,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
        Route::get('/admin/laporan', [LaporanController::class, 'laporanKehadiran'])->name('admin.laporan');
        Route::get('/admin/dataKaryawan', [DataKaryawanController::class, 'index'])->name('admin.dataKaryawan');
        Route::post('/admin/dataKaryawan', [DataKaryawanController::class, 'store'])->name('admin.dataKaryawan');
+
+      Route::put('/admin/dataKaryawan/{id}', [DataKaryawanController::class, 'update'])->name('admin.dataKaryawan.update');
+      Route::get('/admin/dataKaryawan/{id}/edit', [DataKaryawanController::class, 'edit'])->name('admin.dataKaryawan.edit');
+      Route::delete('/admin/dataKaryawan/{id}', [DataKaryawanController::class, 'destroy'])->name('admin.dataKaryawan.destroy');
     
     
 });
@@ -94,6 +103,9 @@ Route::middleware(['auth', 'karyawan'])->group(function () {
 
          Route::get('/karyawan/izin',[IzinController::class,'index'])->name('karyawan.izin'); 
          Route::post('/karyawan/izin',[IzinController::class,'store'])->name('karyawan.izin'); 
+
+         //edit dan hapus pada halaman tambah data karyawan 
+         
          
 });
 

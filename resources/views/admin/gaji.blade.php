@@ -10,27 +10,33 @@
     </div>
     <div class="card-body">
         <table class="table table-bordered">
-            <thead class="thead-dark text-center">
-                <tr class="bg-gray-100">
-                    <th class="border px-4 py-2">Nama Karyawan</th>
-                    <th class="border px-4 py-2">Hadir</th>
-                    <th class="border px-4 py-2">Alpha</th>
-                    <th class="border px-4 py-2">Gaji Pokok</th>
-                    <th class="border px-4 py-2">Potongan</th>
-                    <th class="border px-4 py-2">Gaji Bersih</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($gajiData as $gaji)
-                    <tr>
-                        <td class="text-center">{{ $gaji['nama'] }}</td>
-                        <td class="text-center">{{ $gaji['hadir'] }}</td>
-                        <td class="text-center">{{ $gaji['alpha'] }}</td>
-                        <td class="text-center">Rp {{ number_format($gaji['gaji_pokok']) }}</td>
-                        <td class="text-center">Rp {{ number_format($gaji['potongan']) }}</td>
-                        <td class="text-center"><strong>Rp {{ number_format($gaji['gaji_bersih']) }}</strong></td>
-                    </tr>
-                @endforeach
+            <thead>
+    <tr>
+        <th>Nama Karyawan</th>
+        <th>Hadir</th>
+        <th>Alpha</th>
+        <th>Hari Kerja</th>
+        <th>Gaji Harian</th>
+        <th>Gaji Pokok</th>
+        <th>Potongan</th>
+        <th>Gaji Bersih</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach($gajiData as $data)
+    <tr>
+        <td>{{ $data['nama'] }}</td>
+        <td>{{ $data['hadir'] }}</td>
+        <td>{{ $data['alpha'] }}</td>
+        <td>{{ $data['hari_kerja'] }}</td>
+        <td>Rp {{ number_format($data['gaji_harian']) }}</td>
+        <td>Rp {{ number_format($data['gaji_pokok']) }}</td>
+        <td>Rp {{ number_format($data['potongan']) }}</td>
+        <td><strong>Rp {{ number_format($data['gaji_bersih']) }}</strong></td>
+    </tr>
+    @endforeach
+</tbody>
+
             </tbody>
         </table>
     </div>

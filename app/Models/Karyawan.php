@@ -20,7 +20,8 @@ class Karyawan extends Model
         'jenis_kelamin',
         'tanggal_lahir',
         'alamat',
-        'tanggal_masuk'
+        'tanggal_masuk',
+        'status',
         
     ];
 

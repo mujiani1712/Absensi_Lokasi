@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('absensis', function (Blueprint $table) {
-              if (!Schema::hasColumn('absensis', 'status')) {
-                $table->string('status')->default('hadir')->after('jam'); 
+            // Tambahkan kolom 'status' jika belum ada
+            if (!Schema::hasColumn('absensis', 'status')) {
+                $table->string('status')->default('hadir')->after('jam');
             }
         });
     }
@@ -24,7 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('absensis', function (Blueprint $table) {
-            //
+            // Hapus kolom 'status' saat rollback
+            if (Schema::hasColumn('absensis', 'status')) {
+                $table->dropColumn('status');
+            }
         });
     }
 };

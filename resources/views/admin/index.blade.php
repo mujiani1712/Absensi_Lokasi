@@ -28,12 +28,13 @@
             <!--begin::Row-->
             <div class="row">
                 <!--begin::Col-->
+                {{--
                 <div class="col-lg-3 col-6">
                     <!--begin::Small Box Widget 1-->
                     <div class="small-box text-bg-primary">
                         <div class="inner">
-                            <h3>150</h3>
-                            <p>New Orders</p>
+                            <h3>'-'</h3>
+                            <p>Pengajuan Izin</p>
                         </div>
                         <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -48,13 +49,50 @@
                     </div>
                     <!--end::Small Box Widget 1-->
                 </div>
+                --}} 
+                <div class="col-lg-3 col-6">
+                    <div class="small-box text-bg-primary position-relative">
+                        <div class="inner">
+                            <h3>Pengajuan Izin</h3>
+                            <p>Permintaan</p>
+                        </div>
+                        @if($jumlahIzinPending > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ $jumlahIzinPending }}
+                            </span>
+                        @endif
+                        <a href="{{ route('admin.aprovalizin') }}" class="small-box-footer">More info</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+            <div class="small-box text-bg-success position-relative">
+                <div class="inner">
+                    <h3>Karyawan Baru</h3>
+                    <p>Permintaan</p>
+                </div>
+                @if($jumlahKaryawanBaru > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ $jumlahKaryawanBaru }}
+                    </span>
+                @endif
+                <a href="{{ route('admin.dataKaryawan') }}" class="small-box-footer">More info</a>
+            </div>
+        </div>
+
+
+
+
+
+
+                {{--
                 <!--end::Col-->
                 <div class="col-lg-3 col-6">
                     <!--begin::Small Box Widget 2-->
                     <div class="small-box text-bg-success">
                         <div class="inner">
-                            <h3>53<sup class="fs-5">%</sup></h3>
-                            <p>Bounce Rate</p>
+                            <h3>'-'<sup class="fs-5"></sup></h3>
+                            <p>Karyawan Baru</p>
                         </div>
                         <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -69,6 +107,9 @@
                     </div>
                     <!--end::Small Box Widget 2-->
                 </div>
+                --}}
+
+                {{--
                 <!--end::Col-->
                 <div class="col-lg-3 col-6">
                     <!--begin::Small Box Widget 3-->
@@ -116,13 +157,14 @@
                     </div>
                     <!--end::Small Box Widget 4-->
                 </div>
+                --}}
                 <!--end::Col-->
             </div>
             <!--end::Row-->
             <!--begin::Row-->
 
 
-            {{--}}
+            {{--
             <div class="row">
                 <!-- Start col -->
                 <div class="col-lg-7 connectedSortable">

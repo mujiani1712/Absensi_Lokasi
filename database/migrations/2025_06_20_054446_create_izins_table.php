@@ -20,7 +20,8 @@ return new class extends Migration
             $table->date('tanggal_berakhir_izin');
             $table->string('keterangan'  );
             $table->string('lampiran')->nullable();
-             $table->string('status')->nullable();
+            $table->string('status')->default('pending'); // ✅ tambah default
+
 
             $table->timestamps();
         });
